@@ -47,4 +47,11 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseUpdated);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id){
+        service.delete(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }

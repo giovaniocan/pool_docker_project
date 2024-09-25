@@ -66,4 +66,11 @@ public class ExpenseService {
 
         return new DataDetailExpense(expense);
     }
+
+    @Transactional
+    public void delete(Long id) {
+        var expense = expenseRepository.findById(id).orElseThrow(() -> new RuntimeException("Despesa com id " + id + " não encontrada"));
+
+        expenseRepository.deleteById(id);
+    }
 }
