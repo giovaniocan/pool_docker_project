@@ -2,6 +2,8 @@ package piscinas.com.api.services;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
 import piscinas.com.api.domain.expense.DataDetailExpense;
@@ -37,4 +39,7 @@ public class ExpenseService {
         return detailExpense;
     }
 
+    public Page<DataDetailExpense> listAll(Pageable pageable) {
+        return expenseRepository.findAll(pageable).map(DataDetailExpense::new);
+    }
 }
