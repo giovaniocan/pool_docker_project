@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import piscinas.com.api.domain.customer.Customer;
-import piscinas.com.api.domain.customer.DataListCustomer;
-import piscinas.com.api.domain.customer.DtoAddCustomer;
-import piscinas.com.api.domain.customer.DtoUpdateCustomer;
+import piscinas.com.api.domain.customer.*;
 import piscinas.com.api.repository.CustomerRepository;
 
 @Service
@@ -19,9 +16,14 @@ public class CustomerService {
     private CustomerRepository repository;
 
     @Transactional
-    public void createCostumer(DtoAddCustomer data) {
-        System.out.println(data);
-        repository.save(new Customer(data));
+    public DataListCustomer createCostumer(DtoAddCustomer data) {
+        var customer = new Customer(data);
+        var newCustomer = repository.save(customer);
+
+        var detailCustomer = new DataListCustomer(newCustomer);
+
+
+        return detailCustomer;
     }
 
     public Page<DataListCustomer> listAll(Pageable pageable) {
@@ -30,9 +32,10 @@ public class CustomerService {
 
 
     @Transactional
-    public void updateCostumer(@Valid DtoUpdateCustomer data) {
+    public DtoCustomerData updateCostumer(@Valid DtoUpdateCustomer data) {
         var costumer = repository.getReferenceById(data.id());
         costumer.update(data);
+        return new DtoCustomerData(costumer);
     }
 
 
@@ -40,5 +43,10 @@ public class CustomerService {
     public void removeCostumer(Long id) {
         var costumer = repository.getReferenceById(id);
         costumer.remove();
+    }
+
+    public DtoCustomerData getCustomer(Long id) {
+        var customer = repository.getReferenceById(id);
+        return  new DtoCustomerData(customer);
     }
 }
