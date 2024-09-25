@@ -1,5 +1,6 @@
 package piscinas.com.api.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class CustomerService {
     }
 
     public DtoCustomerData getCustomer(Long id) {
-        var customer = repository.getReferenceById(id);
+        var customer = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cliente com o id " + id + " não encontrado"));
         return  new DtoCustomerData(customer);
     }
 }
