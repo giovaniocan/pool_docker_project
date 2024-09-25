@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import piscinas.com.api.domain.expense.DataDetailExpense;
 import piscinas.com.api.domain.expense.DtoAddExpense;
+import piscinas.com.api.domain.expense.DtoUpdateExpense;
 import piscinas.com.api.services.ExpenseService;
 
 @RestController
@@ -37,6 +38,13 @@ public class ExpenseController {
         var page = service.listAll(pageable);
 
         return ResponseEntity.ok(page);
+    }
+
+    @PutMapping
+    public ResponseEntity update(@RequestBody @Valid DtoUpdateExpense data){
+        var expenseUpdated = service.update(data);
+
+        return ResponseEntity.ok(expenseUpdated);
     }
 
 }

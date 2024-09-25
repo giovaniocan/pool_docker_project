@@ -1,6 +1,7 @@
 package piscinas.com.api.domain.expense;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,5 +37,18 @@ public class Expense {
         this.description = data.description();
         this.value = data.value();
         this.date = data.date();
+    }
+
+    public void update(DtoUpdateExpense data, Customer customer) {
+        this.customer = customer;
+        if(data.description() != null) {
+            this.description = data.description();
+        }
+        if(data.value() != null) {
+            this.value = data.value();
+        }
+        if(data.date() != null) {
+            this.date = data.date();
+        }
     }
 }
