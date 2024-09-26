@@ -54,4 +54,11 @@ public class ExpenseController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<DataDetailExpense> detailOneExpense(@PathVariable Long id){
+        var expense = service.detailOne(id);
+
+        return ResponseEntity.ok(expense);
+    }
+
 }
