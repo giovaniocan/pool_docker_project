@@ -78,4 +78,8 @@ public class ExpenseService {
         var expense = expenseRepository.findById(id).orElseThrow(() -> new RuntimeException("Despesa com id " + id + " não encontrada"));
         return new DataDetailExpense(expense);
     }
+
+    public Page<DataDetailExpense> listAllByCustomer(Long id, Pageable pageable) {
+        return expenseRepository.findByCustomerId(id, pageable).map(DataDetailExpense::new);
+    }
 }

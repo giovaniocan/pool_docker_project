@@ -33,6 +33,13 @@ public class ExpenseController {
         return ResponseEntity.created(uri).body(expense);
     }
 
+    @GetMapping("/customer/{id}")
+    public ResponseEntity<Page<DataDetailExpense>> listExpensesByCustomer(@PathVariable Long id, @PageableDefault(size = 10, sort = {"date"},direction = Sort.Direction.DESC) Pageable pageable) {
+        var page = service.listAllByCustomer(id, pageable);
+
+        return ResponseEntity.ok(page);
+    }
+
     @GetMapping
     public ResponseEntity<Page<DataDetailExpense>> listExpenses(@PageableDefault(size = 10, sort = {"date"},direction = Sort.Direction.DESC) Pageable pageable) {
         var page = service.listAll(pageable);
