@@ -69,9 +69,7 @@ public class ExpenseService {
 
     @Transactional
     public void delete(Long id) {
-        var expense = expenseRepository.findById(id).orElseThrow(() -> new RuntimeException("Despesa com id " + id + " não encontrada"));
 
-        expenseRepository.deleteById(id);
     }
 
     public DataDetailExpense detailOne(Long id) {
@@ -81,5 +79,14 @@ public class ExpenseService {
 
     public Page<DataDetailExpense> listAllByCustomer(Long id, Pageable pageable) {
         return expenseRepository.findByCustomerId(id, pageable).map(DataDetailExpense::new);
+    }
+
+    public Page<DataDetailExpense> listAllByCustomerAndMonthAndYear(Long id, Integer year, Integer month, Pageable pageable) {
+       return expenseRepository.findByCustomerIdAndYearAndMonth(id, year, month, pageable).map(DataDetailExpense::new);
+    }
+
+    public  Page<DataDetailExpense>  listAllByCustomerAndYear(Long id, Integer year, Pageable pageable) {
+        return expenseRepository.findByCustomerIdAndYear(id, year, pageable).map(DataDetailExpense::new);
+
     }
 }

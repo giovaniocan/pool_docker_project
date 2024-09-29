@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import piscinas.com.api.domain.expense.DataDetailExpense;
+import piscinas.com.api.domain.expense.DataListOfExpenseWithTotal;
 import piscinas.com.api.domain.expense.DtoAddExpense;
 import piscinas.com.api.domain.expense.DtoUpdateExpense;
 import piscinas.com.api.services.ExpenseService;
@@ -34,10 +35,30 @@ public class ExpenseController {
     }
 
     @GetMapping("/customer/{id}")
-    public ResponseEntity<Page<DataDetailExpense>> listExpensesByCustomer(@PathVariable Long id, @PageableDefault(size = 10, sort = {"date"},direction = Sort.Direction.DESC) Pageable pageable) {
-        var page = service.listAllByCustomer(id, pageable);
+    public ResponseEntity<DataListOfExpenseWithTotal> listExpensesByCustomer(
+            @PathVariable Long id, @PageableDefault(size = 10, sort = {"date"},direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(value = "year", required = false ) Integer year,
+            @RequestParam(value = "month", required = false ) Integer month
+            ) {
 
-        return ResponseEntity.ok(page);
+        Page<DataDetailExpense> page;
+
+        if(year != null){
+
+            if(month != null){
+                 page =service.listAllByCustomerAndMonthAndYear(id, year, month, pageable);
+            }
+
+             page = service.listAllByCustomerAndYear(id, year, pageable);
+        }else {
+             page = service.listAllByCustomer(id, pageable);
+        }
+
+        Double total =  page.getContent().stream()
+                .map(DataDetailExpense::value)
+                .reduce(0.0, Double::sum);
+
+        return ResponseEntity.ok(new DataListOfExpenseWithTotal(total, page));
     }
 
     @GetMapping
